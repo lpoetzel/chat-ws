@@ -7,7 +7,6 @@ function App() {
   const [messageList, setMessageList] = useState([]);
   const [nickName, setNickName] = useState("");
   const [newMessageText, setNewMessageText] = useState("");
-
   useEffect(() => {
     socket.on("connect", () => {
       console.log("connected");
