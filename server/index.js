@@ -6,7 +6,7 @@ const socketIO = require("socket.io");
 const server = app.listen(3001);
 
 const io = socketIO(server, {
-  cors: { origin: "http://localhost:3000" },
+  cors: { origin: ["http://localhost:3000"] },
 });
 
 const messages = [
@@ -25,5 +25,6 @@ io.on("connect", (socket) => {
     const newMessage = { id: uniqid(), ...messageTextAndAuthor };
     console.log("new message from a client: ", newMessage);
     messages.push(newMessage);
+    io.emit("messageToClient", newMessage);
   });
 });

@@ -1,12 +1,26 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-const socketIOClient = require("socket.io-client");
+import socketIOClient from "socket.io-client";
 const socket = socketIOClient("http://localhost:3001");
 
 function App() {
   const [messageList, setMessageList] = useState([]);
   const [nickName, setNickName] = useState("");
   const [newMessageText, setNewMessageText] = useState("");
+
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log("connected");
+    });
+
+    socket.on("initialMessageList", (messages) => {
+      setMessageList(messages);
+    });
+
+    socket.on("messageToClient", (newMessageText) => {
+      setMessageList((prev) => [...prev, newMessageText]);
+    });
+  }, []);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -15,11 +29,6 @@ function App() {
       author: nickName,
     });
   };
-  useEffect(() => {
-    socket.on("initialMessageList", (messages) => {
-      setMessageList(messages);
-    });
-  }, []);
 
   return (
     <div className="App">
